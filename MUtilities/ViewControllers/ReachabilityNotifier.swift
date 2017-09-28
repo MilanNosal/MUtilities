@@ -42,6 +42,7 @@ class ReachabilityNotifier: UIViewController {
         self.networkStatusBar.backgroundColor = ReachabilityNotifier.disconnectedColor
         self.barCollapsedConstraint?.isActive = false
         self.barExpandedConstraint?.isActive = true
+        Static.window.isHidden = false
         self.networkStatusBar.setNeedsLayout()
         UIView.animate(withDuration: 0.2) {
             self.networkStatusBar.layoutIfNeeded()
@@ -60,9 +61,11 @@ class ReachabilityNotifier: UIViewController {
             self.barCollapsedConstraint?.isActive = true
             self.networkStatusLabel.text = ""
             self.networkStatusBar.setNeedsLayout()
-            UIView.animate(withDuration: 0.2) {
+            UIView.animate(withDuration: 0.2, animations: {
                 self.networkStatusBar.layoutIfNeeded()
-            }
+            }, completion: { (_) in
+                Static.window.isHidden = true
+            })
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: dismissWorkItem!)
     }
